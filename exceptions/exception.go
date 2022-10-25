@@ -6,7 +6,6 @@ import "fmt"
 //needed to create custom exceptions
 //for an applications
 type ExceptionBlueprint interface {
-	Error() string
 }
 
 //Data stores information about an exception
@@ -19,9 +18,9 @@ type Data struct {
 //Exception holds information about expected
 //errors in an application
 type Exception struct {
-	Code    string `json:"code" bson:"code" xml:"code" yaml:"code" asn1:"utf8"`
-	Message string `json:"message" bson:"message" xml:"message" yaml:"message" asn1:"utf8"`
-	Data    []Data `json:"data,omitempty" bson:"data,omitempty" xml:"data,omitempty" yaml:"data,omitempty" asn1:"utf8"`
+	Code    Code    `json:"code" bson:"code" xml:"code" yaml:"code" asn1:"utf8"`
+	Message Message `json:"message" bson:"message" xml:"message" yaml:"message" asn1:"utf8"`
+	Data    []Data  `json:"data,omitempty" bson:"data,omitempty" xml:"data,omitempty" yaml:"data,omitempty" asn1:"utf8"`
 }
 
 //Error ensures that the struct

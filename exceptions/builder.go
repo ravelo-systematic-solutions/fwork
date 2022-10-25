@@ -29,11 +29,11 @@ func (b *builder) Include(data Data) {
 }
 
 //SetMessage overwrites its value
-func (b *builder) SetMessage(message string) {
+func (b *builder) SetMessage(message Message) {
 	b.exception.Message = message
 }
 
 //SetCode overwrites its value
-func (b *builder) SetCode(code string) {
+func (b *builder) SetCode(code Code) {
 	b.exception.Code = code
 }
