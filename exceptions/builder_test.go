@@ -2,7 +2,7 @@ package exceptions_test
 
 import (
 	"fwork/exceptions"
-	"fwork/utils"
+	"fwork/testutils"
 	"reflect"
 	"testing"
 )
@@ -15,7 +15,7 @@ func TestNewBuilder(t *testing.T) {
 	b := exceptions.NewBuilder()
 
 	//then
-	actual := utils.GetType(b)
+	actual := testutils.GetType(b)
 	if actual != expected {
 		t.Errorf("got %s but want %s", actual, expected)
 	}
