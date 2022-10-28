@@ -12,6 +12,12 @@ func TestEngine_Run_success(t *testing.T) {
 	//given
 	api := &engine{
 		server: http.Server{Addr: ":90000"},
+		config: Config{Service: Service{
+			Id:       "i1",
+			Name:     "n1",
+			Internal: ":90000",
+			External: "http://localhost:90000",
+		}},
 	}
 
 	go func(api *engine) {
