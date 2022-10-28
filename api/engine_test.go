@@ -9,6 +9,7 @@ import (
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
+	"fwork/exceptions"
 	"log"
 	"math/big"
 	"net"
@@ -82,10 +83,26 @@ func TestEngine_Run(t *testing.T) {
 	err := api.Run()
 
 	//then
-	if err != nil {
+	if err == nil {
 		t.Errorf(
-			"Run(), unexpected error: %v",
-			err,
+			"Run(), error expected",
+		)
+	}
+
+	ex := err.(*exceptions.Exception)
+	if ex.Code != exceptions.ResourceClosedCode {
+		t.Errorf(
+			"Run(), got %v but want %v",
+			ex.Code,
+			exceptions.ResourceClosedCode,
+		)
+	}
+
+	if ex.Message != exceptions.ResourceClosedMessage {
+		t.Errorf(
+			"Run(), got %v but want %v",
+			ex.Message,
+			exceptions.ResourceClosedMessage,
 		)
 	}
 }
