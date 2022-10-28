@@ -10,8 +10,8 @@ func GeneratePrivateKey(keySize int) (*rsa.PrivateKey, error) {
 	rsaKey, err := rsa.GenerateKey(rand.Reader, keySize)
 	if err != nil {
 		e := exceptions.NewBuilder()
-		e.SetCode(exceptions.ResourceNotFoundCode)
-		e.SetMessage(exceptions.ResourceNotFoundMessage)
+		e.SetCode(exceptions.ResourceNotGeneratedCode)
+		e.SetMessage(exceptions.ResourceNotGeneratedMessage)
 		e.Include(exceptions.Data{
 			Value: err.Error(),
 		})
