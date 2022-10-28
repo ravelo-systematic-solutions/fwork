@@ -2,6 +2,7 @@ package api
 
 import (
 	"crypto/rsa"
+	"fwork/exceptions"
 	"log"
 	"net/http"
 )
@@ -29,10 +30,20 @@ type engine struct {
 	privateKey  rsa.PrivateKey
 }
 
-func (e *engine) Run() {
+func (e *engine) Run() error {
 	log.Printf(
 		"Running on %v",
 		e.config.Service.External,
 	)
-	e.server.ListenAndServeTLS("", "")
+	err := e.server.ListenAndServeTLS("", "")
+	if err == http.ErrServerClosed {
+		e := exceptions.NewBuilder()
+		e.SetCode(exceptions.ResourceClosedCode)
+		e.SetMessage(exceptions.ResourceClosedMessage)
+		e.Include(exceptions.Data{Value: err.Error()})
+
+		return e.Exception()
+	}
+
+	return nil
 }

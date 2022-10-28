@@ -9,6 +9,7 @@ const (
 	ResourceDuplicatedCode        = "fwork_rd"
 	ResourceNotFoundCode          = "fwork_rnf"
 	ResourceInvalidCode           = "fwork_ri"
+	ResourceClosedCode            = "fwork_rc"
 )
 
 type Message string
@@ -19,5 +20,6 @@ const (
 	ResourceDuplicatedMessage           = "resource duplicated"
 	ResourceNotGeneratedMessage         = "resource not generated"
 	ResourceNotFoundMessage             = "resource not found"
-	ResourceInvalidMessage              = "invalid json"
+	ResourceInvalidMessage              = "resource invalid"
+	ResourceClosedMessage               = "resource closed"
 )
