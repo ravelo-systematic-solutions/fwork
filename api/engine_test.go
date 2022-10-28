@@ -79,7 +79,13 @@ func TestEngine_Run(t *testing.T) {
 	}(api)
 
 	//when
-	api.Run()
+	err := api.Run()
 
 	//then
+	if err != nil {
+		t.Errorf(
+			"Run(), unexpected error: %v",
+			err,
+		)
+	}
 }

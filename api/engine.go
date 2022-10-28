@@ -36,14 +36,11 @@ func (e *engine) Run() error {
 		e.config.Service.External,
 	)
 	err := e.server.ListenAndServeTLS("", "")
-	if err == http.ErrServerClosed {
-		e := exceptions.NewBuilder()
-		e.SetCode(exceptions.ResourceClosedCode)
-		e.SetMessage(exceptions.ResourceClosedMessage)
-		e.Include(exceptions.Data{Value: err.Error()})
 
-		return e.Exception()
-	}
+	ex := exceptions.NewBuilder()
+	ex.SetCode(exceptions.ResourceClosedCode)
+	ex.SetMessage(exceptions.ResourceClosedMessage)
+	ex.Include(exceptions.Data{Value: err.Error()})
 
-	return nil
+	return ex.Exception()
 }
