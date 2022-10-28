@@ -11,8 +11,8 @@ func JsonToVar(reader io.Reader, body interface{}) error {
 	err := json.NewDecoder(reader).Decode(body)
 	if err != nil {
 		e := exceptions.NewBuilder()
-		e.SetCode(exceptions.InvalidJsonCode)
-		e.SetMessage(exceptions.InvalidJsonMessage)
+		e.SetCode(exceptions.ResourceInvalidCode)
+		e.SetMessage(exceptions.ResourceInvalidMessage)
 
 		return e.Exception()
 	}

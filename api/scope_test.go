@@ -61,8 +61,8 @@ func TestScope_GetData_KeyNotFound(t *testing.T) {
 	}
 
 	exception := exceptions.NewBuilder()
-	exception.SetCode(exceptions.KeyNotFoundCode)
-	exception.SetMessage(exceptions.KeyNotFoundMessage)
+	exception.SetCode(exceptions.ResourceNotFoundCode)
+	exception.SetMessage(exceptions.ResourceNotFoundMessage)
 	expected := exception.Exception()
 
 	//when
@@ -139,8 +139,8 @@ func TestScope_SetData_DuplicatedKey(t *testing.T) {
 			scope.SetData("key", test.val)
 
 			exception := exceptions.NewBuilder()
-			exception.SetCode(exceptions.DuplicatedKeyCode)
-			exception.SetMessage(exceptions.DuplicatedKeyMessage)
+			exception.SetCode(exceptions.ResourceDuplicatedCode)
+			exception.SetMessage(exceptions.ResourceDuplicatedMessage)
 			expected := exception.Exception()
 
 			//when

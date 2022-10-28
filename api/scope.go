@@ -20,8 +20,8 @@ type Scope struct {
 func (scope *Scope) GetData(key string) (any, error) {
 	if val, ok := scope.d[key]; !ok {
 		exception := exceptions.NewBuilder()
-		exception.SetCode(exceptions.KeyNotFoundCode)
-		exception.SetMessage(exceptions.KeyNotFoundMessage)
+		exception.SetCode(exceptions.ResourceNotFoundCode)
+		exception.SetMessage(exceptions.ResourceNotFoundMessage)
 
 		return nil, exception.Exception()
 	} else {
@@ -36,8 +36,8 @@ func (scope *Scope) GetData(key string) (any, error) {
 func (scope *Scope) SetData(key string, val any) error {
 	if _, ok := scope.d[key]; ok {
 		exception := exceptions.NewBuilder()
-		exception.SetCode(exceptions.DuplicatedKeyCode)
-		exception.SetMessage(exceptions.DuplicatedKeyMessage)
+		exception.SetCode(exceptions.ResourceDuplicatedCode)
+		exception.SetMessage(exceptions.ResourceDuplicatedMessage)
 
 		return exception.Exception()
 	}

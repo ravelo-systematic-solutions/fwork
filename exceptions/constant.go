@@ -3,15 +3,21 @@ package exceptions
 type Code string
 
 const (
-	DuplicatedKeyCode Code = "fwork_dk"
-	KeyNotFoundCode        = "fwork_knf"
-	InvalidJsonCode        = "fwork_ij"
+	ResourceNotEncodedCode   Code = "fwork_rne"
+	ResourcesNotPairedCode        = "fwork_rnp"
+	ResourceNotGeneratedCode      = "fwork_rng"
+	ResourceDuplicatedCode        = "fwork_rd"
+	ResourceNotFoundCode          = "fwork_rnf"
+	ResourceInvalidCode           = "fwork_ri"
 )
 
 type Message string
 
 const (
-	DuplicatedKeyMessage Message = "duplicated key"
-	KeyNotFoundMessage           = "key not found"
-	InvalidJsonMessage           = "invalid json"
+	ResourceNotEncodedMessage   Message = "resource not encoded"
+	ResourcesNotPairedMessage           = "resources not paired"
+	ResourceDuplicatedMessage           = "resource duplicated"
+	ResourceNotGeneratedMessage         = "resource not generated"
+	ResourceNotFoundMessage             = "resource not found"
+	ResourceInvalidMessage              = "invalid json"
 )

@@ -33,8 +33,8 @@ func TestJsonToVar_success(t *testing.T) {
 func TestJsonToVar_invalidJson(t *testing.T) {
 	//given
 	e := exceptions.NewBuilder()
-	e.SetCode(exceptions.InvalidJsonCode)
-	e.SetMessage(exceptions.InvalidJsonMessage)
+	e.SetCode(exceptions.ResourceInvalidCode)
+	e.SetMessage(exceptions.ResourceInvalidMessage)
 
 	expected := e.Exception()
 
