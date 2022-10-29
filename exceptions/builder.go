@@ -37,3 +37,9 @@ func (b *builder) SetMessage(message Message) {
 func (b *builder) SetCode(code Code) {
 	b.exception.Code = code
 }
+
+//IsEmpty retrieves if the exception
+//contains metadata
+func (b *builder) IsEmpty() bool {
+	return len(b.exception.Data) == 0
+}

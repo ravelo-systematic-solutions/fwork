@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fwork/exceptions"
+	"log"
 	"net/http"
 )
 
@@ -77,4 +78,21 @@ func (s *Scope) JsonRes(status int, body interface{}) {
 // Sets default value if absent (eg. /a?b=c)
 func (s *Scope) QueryValue(key string) string {
 	return s.r.URL.Query().Get(key)
+}
+
+// NewRequest creates an Handler's Scope instance
+func NewRequest(w http.ResponseWriter, r *http.Request) *Scope {
+	return &Scope{
+		r: r,
+		w: w,
+		d: make(map[string]any),
+	}
+}
+
+// JsonBody contains the Scope's body in JSON format
+func (s *Scope) extractJsonBody(body interface{}) {
+	err := json.NewDecoder(s.r.Body).Decode(&body)
+	if err != nil {
+		log.Fatalln(err)
+	}
 }

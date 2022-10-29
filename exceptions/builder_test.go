@@ -47,3 +47,34 @@ func TestBuilder_Exception(t *testing.T) {
 		t.Errorf("got %s but want %s", actual, expected)
 	}
 }
+
+func TestBuilder_IsEmpty_true(t *testing.T) {
+	//given
+	b := exceptions.NewBuilder()
+	b.SetCode("C1")
+	b.SetMessage("M1")
+	b.Include(exceptions.Data{Name: "n1", Tag: "t1", Value: "v1"})
+
+	//when
+	actual := b.IsEmpty()
+
+	//then
+	if actual {
+		t.Errorf("IsEmpty(), should be false")
+	}
+}
+
+func TestBuilder_IsEmpty_false(t *testing.T) {
+	//given
+	b := exceptions.NewBuilder()
+	b.SetCode("C1")
+	b.SetMessage("M1")
+
+	//when
+	actual := b.IsEmpty()
+
+	//then
+	if !actual {
+		t.Errorf("IsEmpty(), should be true")
+	}
+}

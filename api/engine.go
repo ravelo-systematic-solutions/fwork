@@ -23,9 +23,14 @@ type Config struct {
 }
 
 type engine struct {
-	server      http.Server
-	config      Config
-	routes      map[string]Handler
+	//server
+	server http.Server
+	config Config
+	routes map[string]Handler
+
+	//interceptors
+
+	//cert
 	certSubject CertificateSubject
 	privateKey  rsa.PrivateKey
 }
