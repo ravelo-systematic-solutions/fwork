@@ -35,6 +35,41 @@ type engine struct {
 	privateKey  rsa.PrivateKey
 }
 
+// Post is a shortcut for registering a POST Handler
+func (e *engine) Post(url string, endpoint Handler) error {
+	return e.addEndpoint(http.MethodPost, url, endpoint)
+}
+
+// Get is a shortcut for registering a GET Handler
+func (e *engine) Get(url string, endpoint Handler) error {
+	return e.addEndpoint(http.MethodGet, url, endpoint)
+}
+
+// Put is a shortcut for registering a PUT Handler
+func (e *engine) Put(url string, endpoint Handler) error {
+	return e.addEndpoint(http.MethodPut, url, endpoint)
+}
+
+// Delete is a shortcut for registering a DELETE Handler
+func (e *engine) Delete(url string, endpoint Handler) error {
+	return e.addEndpoint(http.MethodDelete, url, endpoint)
+}
+
+// addEndpoint is a shortcut which registers an Api Handler
+func (e *engine) addEndpoint(method, url string, endpoint Handler) error {
+	key := GenerateEndpointKey(method, url)
+	if _, ok := e.routes[key]; ok {
+		ex := exceptions.NewBuilder()
+		ex.SetCode(exceptions.ResourceDuplicatedCode)
+		ex.SetMessage(exceptions.ResourceDuplicatedMessage)
+		ex.Include(exceptions.Data{Value: key})
+
+		return ex.Exception()
+	}
+	e.routes[key] = endpoint
+	return nil
+}
+
 func (e *engine) Run() error {
 	log.Printf(
 		"Running on %v",
