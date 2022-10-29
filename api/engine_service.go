@@ -14,7 +14,7 @@ import (
 	"net/http"
 )
 
-func NewEngineService(certSubject CertificateSubject, privateKey rsa.PrivateKey) (*engine, error) {
+func NewEngineService(certSubject CertificateSubject, privateKey *rsa.PrivateKey, config Config) (*engine, error) {
 
 	cert := &x509.Certificate{
 		SerialNumber: big.NewInt(certSubject.SerialNumber),
@@ -61,7 +61,7 @@ func NewEngineService(certSubject CertificateSubject, privateKey rsa.PrivateKey)
 	certPrivKeyPEM := new(bytes.Buffer)
 	pem.Encode(certPrivKeyPEM, &pem.Block{
 		Type:  "RSA PRIVATE KEY",
-		Bytes: x509.MarshalPKCS1PrivateKey(&privateKey),
+		Bytes: x509.MarshalPKCS1PrivateKey(privateKey),
 	})
 	if err != nil {
 		e := exceptions.NewBuilder()
@@ -88,7 +88,7 @@ func NewEngineService(certSubject CertificateSubject, privateKey rsa.PrivateKey)
 
 	return &engine{
 		server: http.Server{
-			Addr:      ":30000",
+			Addr:      config.Service.Internal,
 			TLSConfig: tlsConfig,
 		},
 		certSubject: certSubject,
