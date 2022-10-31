@@ -210,3 +210,13 @@ func TestEngine_Get_duplicated(t *testing.T) {
 	}
 
 }
+
+func TestEngine_ServeHTTP_success(t *testing.T) {}
+
+func TestEngine_ServeHTTP_Before_success(t *testing.T) {}
+
+func TestEngine_ServeHTTP_Before_error(t *testing.T) {}
+
+func TestEngine_ServeHTTP_After_success(t *testing.T) {}
+
+func TestEngine_ServeHTTP_After_error(t *testing.T) {}
