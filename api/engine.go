@@ -29,6 +29,7 @@ type engine struct {
 	routes map[string]Handler
 
 	//interceptors
+	i []InterceptorI
 
 	//cert
 	certSubject CertificateSubject
@@ -73,6 +74,49 @@ func (e *engine) addEndpoint(method, url string, endpoint Handler) error {
 //ServeHTTP entry point for HTTP requests
 func (e *engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
+	s := NewScope(w, r)
+	key := GenerateEndpointKey(r.Method, r.RequestURI)
+	handler := e.GetHandler(key)
+
+	for _, interceptor := range e.i {
+		err := interceptor.Before(s)
+		if err != nil {
+			s.JsonRes(http.StatusInternalServerError, err.Error())
+			e.DispatchResponse(s)
+			return
+		}
+	}
+
+	handler(s)
+
+	for _, interceptor := range e.i {
+		err := interceptor.After(s)
+		if err != nil {
+			s.JsonRes(http.StatusInternalServerError, err.Error())
+			e.DispatchResponse(s)
+			return
+		}
+	}
+
+	e.DispatchResponse(s)
+}
+
+func (e *engine) DispatchResponse(s *Scope) {
+	s.w.Header().Set("Access-Control-Allow-Origin", "*")
+	s.w.Header().Set("Content-Type", "application/json")
+	s.w.WriteHeader(s.s)
+	s.w.Write(s.b)
+}
+
+//GetHandler retrieves the handler which needs
+//to handle the request
+func (e *engine) GetHandler(key string) Handler {
+
+	if handler, ok := e.routes[key]; ok {
+		return handler
+	}
+
+	return NotFound
 }
 
 func (e *engine) Run() error {

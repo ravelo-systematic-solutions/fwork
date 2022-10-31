@@ -83,6 +83,7 @@ func NewServiceCa(certSubject CertificateSubject, privateKey *rsa.PrivateKey, co
 			Addr:      config.Service.Internal,
 			TLSConfig: tlsConfig,
 		},
+		i:           make([]InterceptorI, 0),
 		certSubject: certSubject,
 	}, nil
 }

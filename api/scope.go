@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"fwork/exceptions"
-	"log"
 	"net/http"
 )
 
@@ -11,6 +10,8 @@ import (
 type Scope struct {
 	w http.ResponseWriter
 	r *http.Request
+	s int
+	b []byte
 	d map[string]any
 }
 
@@ -62,16 +63,24 @@ func (scope *Scope) Method() string {
 
 //Path retrieves the requested URL
 func (scope *Scope) Path() string {
-	return scope.r.URL.Path
+	return scope.r.URL.RequestURI()
 }
 
 // JsonRes replies to client with json format
 func (s *Scope) JsonRes(status int, body interface{}) {
-	//s.w.Header().Set("Access-Control-Allow-Origin", "*")
-	s.w.Header().Set("Content-Type", "application/json")
-	s.w.WriteHeader(status)
+	bodyByte, err := json.Marshal(body)
+	if err != nil {
+		e := exceptions.NewBuilder()
+		e.SetCode(exceptions.ResourceNotEncodedCode)
+		e.SetMessage(exceptions.ResourceNotEncodedMessage)
+		e.Include(exceptions.Data{Value: err})
 
-	json.NewEncoder(s.w).Encode(body)
+		bodyByte, _ = json.Marshal(e.Exception())
+		status = http.StatusInternalServerError
+	}
+
+	s.s = status
+	s.b = bodyByte
 }
 
 // QueryValue extracts a string from Query parameter
@@ -89,10 +98,10 @@ func NewScope(w http.ResponseWriter, r *http.Request) *Scope {
 	}
 }
 
-// JsonBody contains the Scope's body in JSON format
-func (s *Scope) extractJsonBody(body interface{}) {
-	err := json.NewDecoder(s.r.Body).Decode(&body)
-	if err != nil {
-		log.Fatalln(err)
-	}
-}
+//// JsonBody contains the Scope's body in JSON format
+//func (s *Scope) extractJsonBody(body interface{}) {
+//	err := json.NewDecoder(s.r.Body).Decode(&body)
+//	if err != nil {
+//		log.Fatalln(err)
+//	}
+//}

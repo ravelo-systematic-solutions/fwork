@@ -1,8 +1,8 @@
 package api
 
 import (
+	"encoding/json"
 	"fwork/exceptions"
-	"fwork/testutils"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -243,25 +243,22 @@ func TestScope_JsonRes_success(t *testing.T) {
 	type person struct {
 		Name string `json:"name"`
 	}
-	var actual person
-	expected := person{
+	expected, _ := json.Marshal(person{
 		Name: "Jhonny",
-	}
-	res := httptest.NewRecorder()
-	scope := Scope{
-		w: res,
-	}
+	})
+	scope := Scope{}
 
 	//when
-	scope.JsonRes(http.StatusAccepted, expected)
+	scope.JsonRes(http.StatusAccepted, person{
+		Name: "Jhonny",
+	})
 
 	//then
-	testutils.JsonToVar(res.Body, &actual)
-	if actual != expected {
+	if string(scope.b) != string(expected) {
 		t.Errorf(
 			"JsonRes(), got %v but want %v",
-			actual,
-			expected,
+			string(scope.b),
+			string(expected),
 		)
 	}
 }

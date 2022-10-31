@@ -6,7 +6,7 @@ import (
 	"io"
 )
 
-// JsonBody contains the Scope's body in JSON format
+//JsonToVar contains the Scope's body in JSON format
 func JsonToVar(reader io.Reader, body interface{}) error {
 	err := json.NewDecoder(reader).Decode(body)
 	if err != nil {
