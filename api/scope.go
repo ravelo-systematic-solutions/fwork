@@ -80,8 +80,8 @@ func (s *Scope) QueryValue(key string) string {
 	return s.r.URL.Query().Get(key)
 }
 
-// NewRequest creates an Handler's Scope instance
-func NewRequest(w http.ResponseWriter, r *http.Request) *Scope {
+//NewScope creates a Handler's Scope instance
+func NewScope(w http.ResponseWriter, r *http.Request) *Scope {
 	return &Scope{
 		r: r,
 		w: w,

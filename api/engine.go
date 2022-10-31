@@ -70,6 +70,11 @@ func (e *engine) addEndpoint(method, url string, endpoint Handler) error {
 	return nil
 }
 
+//ServeHTTP entry point for HTTP requests
+func (e *engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
+}
+
 func (e *engine) Run() error {
 	log.Printf(
 		"Running on %v",

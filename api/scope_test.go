@@ -286,3 +286,29 @@ func TestScope_QueryValue(t *testing.T) {
 		)
 	}
 }
+
+func TestNewRequest(t *testing.T) {
+	//given
+	w := httptest.NewRecorder()
+	r, _ := http.NewRequest(http.MethodGet, "/some-url", nil)
+
+	//when
+	s := NewScope(w, r)
+
+	//then
+	if !reflect.DeepEqual(s.w, w) {
+		t.Errorf(
+			"NewScope(), go %v but want %v",
+			s.w,
+			w,
+		)
+	}
+
+	if !reflect.DeepEqual(s.r, r) {
+		t.Errorf(
+			"NewScope(), go %v but want %v",
+			s.r,
+			r,
+		)
+	}
+}
