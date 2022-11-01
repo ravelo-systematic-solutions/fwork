@@ -3,6 +3,7 @@ package api
 import "time"
 
 type CertificateSubject struct {
+	ServiceId     string
 	Organization  []string
 	Country       []string
 	Province      []string
