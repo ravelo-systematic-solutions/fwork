@@ -10,10 +10,13 @@ import (
 	"crypto/x509/pkix"
 	"encoding/pem"
 	"fwork/exceptions"
+	"fwork/response"
+	"fwork/testutils"
 	"log"
 	"math/big"
 	"net"
 	"net/http"
+	"net/http/httptest"
 	"testing"
 	"time"
 )
@@ -211,9 +214,124 @@ func TestEngine_Get_duplicated(t *testing.T) {
 
 }
 
-func TestEngine_ServeHTTP_success(t *testing.T) {}
+func TestEngine_GetHandler_success(t *testing.T) {
+	//given
+	url := "/some-url"
+	e := engine{
+		routes: make(map[string]Handler, 0),
+	}
+	key := GenerateEndpointKey(http.MethodGet, url)
+	e.routes[key] = func(s *Scope) {}
 
-func TestEngine_ServeHTTP_Before_success(t *testing.T) {}
+	// when
+	handler := e.GetHandler(key)
+
+	//then
+	if testutils.GetType(handler) != "fwork/api.TestEngine_GetHandler_success.func1" {
+		t.Errorf(
+			"GetHandler(), got %v but want %v",
+			testutils.GetType(handler),
+			"fwork/api.TestEngine_GetHandler_success.func1",
+		)
+	}
+
+}
+
+func TestEngine_GetHandler_NotFounr(t *testing.T) {
+	//given
+	url := "/some-url"
+	e := engine{
+		routes: make(map[string]Handler, 0),
+	}
+	key := GenerateEndpointKey(http.MethodGet, url)
+	e.routes[key] = func(s *Scope) {}
+
+	// when
+	handler := e.GetHandler("invalid-key")
+
+	//then
+	if testutils.GetType(handler) != "fwork/api.NotFound" {
+		t.Errorf(
+			"GetHandler(), got %v but want %v",
+			testutils.GetType(handler),
+			"fwork/api.NotFound",
+		)
+	}
+}
+
+func TestEngine_ServeHTTP_success(t *testing.T) {
+	//given
+	url := "/some-url"
+	e := engine{
+		routes: make(map[string]Handler, 0),
+	}
+	key := GenerateEndpointKey(http.MethodGet, url)
+	e.routes[key] = func(s *Scope) {
+		s.JsonRes(
+			http.StatusAccepted,
+			response.Void{},
+		)
+	}
+	w := httptest.NewRecorder()
+	r, _ := http.NewRequest(http.MethodGet, url, nil)
+	expectedResponse := "{}"
+
+	//when
+	e.ServeHTTP(w, r)
+
+	//then
+	if w.Body.String() != "{}" {
+		t.Errorf(
+			"ServeHTTP(), got %v but want %v",
+			w.Body.String(),
+			expectedResponse,
+		)
+	}
+	if w.Code != http.StatusAccepted {
+		t.Errorf(
+			"ServeHTTP(), got %v but want %v",
+			w.Code,
+			http.StatusAccepted,
+		)
+	}
+}
+
+func TestEngine_ServeHTTP_Before_success(t *testing.T) {
+	//given
+	url := "/some-url"
+	e := engine{
+		routes: make(map[string]Handler, 0),
+	}
+	key := GenerateEndpointKey(http.MethodGet, url)
+	e.routes[key] = func(s *Scope) {
+		s.JsonRes(
+			http.StatusAccepted,
+			response.Void{},
+		)
+	}
+	w := httptest.NewRecorder()
+	r, _ := http.NewRequest(http.MethodGet, url, nil)
+	expectedResponse := "{}"
+
+	//when
+	e.ServeHTTP(w, r)
+
+	//then
+	if w.Body.String() != "{}" {
+		t.Errorf(
+			"ServeHTTP(), got %v but want %v",
+			w.Body.String(),
+			expectedResponse,
+		)
+	}
+	if w.Code != http.StatusAccepted {
+		t.Errorf(
+			"ServeHTTP(), got %v but want %v",
+			w.Code,
+			http.StatusAccepted,
+		)
+	}
+}
 
 func TestEngine_ServeHTTP_Before_error(t *testing.T) {}
 

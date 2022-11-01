@@ -74,29 +74,31 @@ func (e *engine) addEndpoint(method, url string, endpoint Handler) error {
 //ServeHTTP entry point for HTTP requests
 func (e *engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
+	errs := make([]exceptions.Exception, 0)
+
 	s := NewScope(w, r)
-	key := GenerateEndpointKey(r.Method, r.RequestURI)
+	key := GenerateEndpointKey(r.Method, r.URL.Path)
 	handler := e.GetHandler(key)
 
-	for _, interceptor := range e.i {
-		err := interceptor.Before(s)
-		if err != nil {
-			s.JsonRes(http.StatusInternalServerError, err.Error())
-			e.DispatchResponse(s)
-			return
-		}
+	//for _, interceptor := range e.i {
+	//	err := interceptor.Before(s)
+	//	ex := err.(*exceptions.Exception)
+	//	errs = append(errs, *ex)
+	//}
+
+	if len(errs) == 0 {
+		handler(s)
 	}
 
-	handler(s)
-
-	for _, interceptor := range e.i {
-		err := interceptor.After(s)
-		if err != nil {
-			s.JsonRes(http.StatusInternalServerError, err.Error())
-			e.DispatchResponse(s)
-			return
-		}
-	}
+	//for _, interceptor := range e.i {
+	//	err := interceptor.Before(s)
+	//	ex := err.(*exceptions.Exception)
+	//	errs = append(errs, *ex)
+	//}
+	//
+	//if len(errs) != 0 {
+	//	s.JsonRes(http., errs)
+	//}
 
 	e.DispatchResponse(s)
 }
