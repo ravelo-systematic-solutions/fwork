@@ -6,6 +6,16 @@ import (
 	"net/http"
 )
 
+type ScopeInterface interface {
+	GetData(key string) (any, error)
+	SetData(key string, val any) error
+	OverrideData(key string, val any)
+	Method() string
+	Path() string
+	JsonRes(status int, body interface{})
+	QueryValue(key string) string
+}
+
 // Scope holds Api Handler context
 type Scope struct {
 	w http.ResponseWriter
