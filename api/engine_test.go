@@ -119,7 +119,7 @@ func TestEngine_Post(t *testing.T) {
 	key := GenerateEndpointKey(http.MethodPost, url)
 
 	// when
-	e.Post(url, func(s *Scope) {})
+	e.Post(url, func(s ScopeInterface) {})
 
 	// then
 	if _, ok := e.routes[key]; !ok {
@@ -136,7 +136,7 @@ func TestEngine_Get(t *testing.T) {
 	key := GenerateEndpointKey(http.MethodGet, url)
 
 	// when
-	e.Get(url, func(s *Scope) {})
+	e.Get(url, func(s ScopeInterface) {})
 
 	// then
 	if _, ok := e.routes[key]; !ok {
@@ -153,7 +153,7 @@ func TestEngine_Put(t *testing.T) {
 	key := GenerateEndpointKey(http.MethodPut, url)
 
 	// when
-	e.Put(url, func(s *Scope) {})
+	e.Put(url, func(s ScopeInterface) {})
 
 	// then
 	if _, ok := e.routes[key]; !ok {
@@ -170,7 +170,7 @@ func TestEngine_Delete(t *testing.T) {
 	key := GenerateEndpointKey(http.MethodDelete, url)
 
 	// when
-	e.Delete(url, func(s *Scope) {})
+	e.Delete(url, func(s ScopeInterface) {})
 
 	// then
 	if _, ok := e.routes[key]; !ok {
@@ -185,10 +185,10 @@ func TestEngine_Get_duplicated(t *testing.T) {
 		routes: make(map[string]Handler, 0),
 	}
 	key := GenerateEndpointKey(http.MethodGet, url)
-	e.routes[key] = func(s *Scope) {}
+	e.routes[key] = func(s ScopeInterface) {}
 
 	// when
-	err := e.Get(url, func(s *Scope) {})
+	err := e.Get(url, func(s ScopeInterface) {})
 
 	// then
 	if err == nil {
@@ -221,7 +221,7 @@ func TestEngine_GetHandler_success(t *testing.T) {
 		routes: make(map[string]Handler, 0),
 	}
 	key := GenerateEndpointKey(http.MethodGet, url)
-	e.routes[key] = func(s *Scope) {}
+	e.routes[key] = func(s ScopeInterface) {}
 
 	// when
 	handler := e.GetHandler(key)
@@ -244,7 +244,7 @@ func TestEngine_GetHandler_NotFounr(t *testing.T) {
 		routes: make(map[string]Handler, 0),
 	}
 	key := GenerateEndpointKey(http.MethodGet, url)
-	e.routes[key] = func(s *Scope) {}
+	e.routes[key] = func(s ScopeInterface) {}
 
 	// when
 	handler := e.GetHandler("invalid-key")
@@ -266,7 +266,7 @@ func TestEngine_ServeHTTP_success(t *testing.T) {
 		routes: make(map[string]Handler, 0),
 	}
 	key := GenerateEndpointKey(http.MethodGet, url)
-	e.routes[key] = func(s *Scope) {
+	e.routes[key] = func(s ScopeInterface) {
 		s.JsonRes(
 			http.StatusAccepted,
 			response.Void{},
@@ -303,7 +303,7 @@ func TestEngine_ServeHTTP_Before_success(t *testing.T) {
 		routes: make(map[string]Handler, 0),
 	}
 	key := GenerateEndpointKey(http.MethodGet, url)
-	e.routes[key] = func(s *Scope) {
+	e.routes[key] = func(s ScopeInterface) {
 		s.JsonRes(
 			http.StatusAccepted,
 			response.Void{},
