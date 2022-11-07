@@ -228,7 +228,7 @@ func TestEngine_GetHandler_success(t *testing.T) {
 	handler := e.GetHandler(key)
 
 	//then
-	if testutils.GetType(handler) != "fwork/api.TestEngine_GetHandler_success.func1" {
+	if testutils.GetType(handler) != "github.com/ravelo-systematic-solutions/fwork/api.TestEngine_GetHandler_success.func1" {
 		t.Errorf(
 			"GetHandler(), got %v but want %v",
 			testutils.GetType(handler),
@@ -251,7 +251,7 @@ func TestEngine_GetHandler_NotFounr(t *testing.T) {
 	handler := e.GetHandler("invalid-key")
 
 	//then
-	if testutils.GetType(handler) != "fwork/api.NotFound" {
+	if testutils.GetType(handler) != "github.com/ravelo-systematic-solutions/fwork/api.NotFound" {
 		t.Errorf(
 			"GetHandler(), got %v but want %v",
 			testutils.GetType(handler),
