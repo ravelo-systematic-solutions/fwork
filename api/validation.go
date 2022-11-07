@@ -35,7 +35,7 @@ func required(v any) bool {
 	return false
 }
 
-func (s *Scope) Query(payload interface{}) error {
+func (s *scope) Query(payload interface{}) error {
 	dataType := reflect.TypeOf(payload).Elem()
 	dataValue := reflect.ValueOf(payload).Elem()
 	ex := exceptions.NewBuilder()
@@ -94,7 +94,7 @@ func (s *Scope) Query(payload interface{}) error {
 }
 
 // JsonBody extract body from request and validates
-func (s *Scope) JsonBody(payload interface{}) error {
+func (s *scope) JsonBody(payload interface{}) error {
 
 	err := json.NewDecoder(s.r.Body).Decode(payload)
 	if err != nil {
@@ -140,7 +140,7 @@ func (s *Scope) JsonBody(payload interface{}) error {
 	return ex.Exception()
 }
 
-func (s *Scope) Headers(payload interface{}) error {
+func (s *scope) Headers(payload interface{}) error {
 	dataType := reflect.TypeOf(payload).Elem()
 	dataValue := reflect.ValueOf(payload).Elem()
 	ex := exceptions.NewBuilder()

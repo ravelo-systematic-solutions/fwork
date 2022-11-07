@@ -7,7 +7,7 @@ import (
 
 func TestNotFound(t *testing.T) {
 	//given
-	scope := &Scope{}
+	scope := &scope{}
 
 	//when
 	NotFound(scope)

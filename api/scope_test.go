@@ -28,7 +28,7 @@ func TestScope_GetData_success(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			//given
-			scope := Scope{
+			scope := scope{
 				d: make(map[string]any, 0),
 			}
 			scope.SetData("key", test.val)
@@ -56,7 +56,7 @@ func TestScope_GetData_success(t *testing.T) {
 
 func TestScope_GetData_KeyNotFound(t *testing.T) {
 	//given
-	scope := Scope{
+	scope := scope{
 		d: make(map[string]any, 0),
 	}
 
@@ -98,7 +98,7 @@ func TestScope_SetData_success(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			//given
-			scope := Scope{
+			scope := scope{
 				d: make(map[string]any, 0),
 			}
 
@@ -133,7 +133,7 @@ func TestScope_SetData_DuplicatedKey(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			//given
-			scope := Scope{
+			scope := scope{
 				d: make(map[string]any, 0),
 			}
 			scope.SetData("key", test.val)
@@ -179,7 +179,7 @@ func TestScope_OverrideData_success(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			//given
-			scope := Scope{
+			scope := scope{
 				d: make(map[string]any, 0),
 			}
 			unexpectedErr := test.err
@@ -200,7 +200,7 @@ func TestScope_Method(t *testing.T) {
 	//given
 	expected := http.MethodGet
 	req, _ := http.NewRequest(expected, "/some-url", nil)
-	scope := Scope{
+	scope := scope{
 		r: req,
 	}
 
@@ -221,7 +221,7 @@ func TestScope_Path(t *testing.T) {
 	//given
 	expected := "/some-url"
 	req, _ := http.NewRequest(http.MethodGet, expected, nil)
-	scope := Scope{
+	scope := scope{
 		r: req,
 	}
 
@@ -246,7 +246,7 @@ func TestScope_JsonRes_success(t *testing.T) {
 	expected, _ := json.Marshal(person{
 		Name: "Jhonny",
 	})
-	scope := Scope{}
+	scope := scope{}
 
 	//when
 	scope.JsonRes(http.StatusAccepted, person{
@@ -267,7 +267,7 @@ func TestScope_QueryValue(t *testing.T) {
 	//given
 	expected := "world"
 	req := httptest.NewRequest(http.MethodGet, "/some-url?hello="+expected, nil)
-	scope := Scope{
+	scope := scope{
 		r: req,
 	}
 

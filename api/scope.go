@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-type ScopeInterface interface {
+type Scope interface {
 	GetData(key string) (any, error)
 	SetData(key string, val any) error
 	OverrideData(key string, val any)
@@ -16,8 +16,8 @@ type ScopeInterface interface {
 	QueryValue(key string) string
 }
 
-// Scope holds Api Handler context
-type Scope struct {
+// scope holds Api Handler context
+type scope struct {
 	w http.ResponseWriter
 	r *http.Request
 	s int
@@ -29,7 +29,7 @@ type Scope struct {
 //contextual data to the request.
 //An exception will be thrown if
 //and when the passed key does not exist
-func (scope *Scope) GetData(key string) (any, error) {
+func (scope *scope) GetData(key string) (any, error) {
 	if val, ok := scope.d[key]; !ok {
 		exception := exceptions.NewBuilder()
 		exception.SetCode(exceptions.ResourceNotFoundCode)
@@ -45,7 +45,7 @@ func (scope *Scope) GetData(key string) (any, error) {
 //data to the request. An exception
 //will be thrown if the key already
 //exists
-func (scope *Scope) SetData(key string, val any) error {
+func (scope *scope) SetData(key string, val any) error {
 	if _, ok := scope.d[key]; ok {
 		exception := exceptions.NewBuilder()
 		exception.SetCode(exceptions.ResourceDuplicatedCode)
@@ -62,22 +62,22 @@ func (scope *Scope) SetData(key string, val any) error {
 //OverrideData sets additional contextual
 //data to the request regarless if the key
 //already exists or not
-func (scope *Scope) OverrideData(key string, val any) {
+func (scope *scope) OverrideData(key string, val any) {
 	scope.d[key] = val
 }
 
 //Method retrieves the requested Method
-func (scope *Scope) Method() string {
+func (scope *scope) Method() string {
 	return scope.r.Method
 }
 
 //Path retrieves the requested URL
-func (scope *Scope) Path() string {
+func (scope *scope) Path() string {
 	return scope.r.URL.RequestURI()
 }
 
 // JsonRes replies to client with json format
-func (s *Scope) JsonRes(status int, body interface{}) {
+func (s *scope) JsonRes(status int, body interface{}) {
 	bodyByte, err := json.Marshal(body)
 	if err != nil {
 		e := exceptions.NewBuilder()
@@ -95,21 +95,21 @@ func (s *Scope) JsonRes(status int, body interface{}) {
 
 // QueryValue extracts a string from Query parameter
 // Sets default value if absent (eg. /a?b=c)
-func (s *Scope) QueryValue(key string) string {
+func (s *scope) QueryValue(key string) string {
 	return s.r.URL.Query().Get(key)
 }
 
-//NewScope creates a Handler's Scope instance
-func NewScope(w http.ResponseWriter, r *http.Request) *Scope {
-	return &Scope{
+//NewScope creates a Handler's scope instance
+func NewScope(w http.ResponseWriter, r *http.Request) *scope {
+	return &scope{
 		r: r,
 		w: w,
 		d: make(map[string]any),
 	}
 }
 
-//// JsonBody contains the Scope's body in JSON format
-//func (s *Scope) extractJsonBody(body interface{}) {
+//// JsonBody contains the scope's body in JSON format
+//func (s *scope) extractJsonBody(body interface{}) {
 //	err := json.NewDecoder(s.r.Body).Decode(&body)
 //	if err != nil {
 //		log.Fatalln(err)

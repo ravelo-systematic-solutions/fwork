@@ -18,7 +18,7 @@ func TestScope_JsonBody(t *testing.T) {
 	//given
 	body := []byte("{\"s\":\"str\",\"i\":123,\"b\":true,\"f\":123.123}")
 	req := httptest.NewRequest(http.MethodPost, "/some-url", bytes.NewReader(body))
-	scope := Scope{
+	scope := scope{
 		r: req,
 	}
 
@@ -57,7 +57,7 @@ func TestScope_Headers(t *testing.T) {
 	req.Header.Set("i", "123")
 	req.Header.Set("b", "true")
 	req.Header.Set("f", "123.123")
-	scope := Scope{
+	scope := scope{
 		r: req,
 	}
 
@@ -88,7 +88,7 @@ func TestScope_Query(t *testing.T) {
 	var actual Sample
 	url := "/some-url?s=str&i=123&b=true&f=123.123"
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
-	scope := Scope{
+	scope := scope{
 		r: req,
 	}
 

@@ -110,7 +110,7 @@ func (e *engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	e.DispatchResponse(s)
 }
 
-func (e *engine) DispatchResponse(s *Scope) {
+func (e *engine) DispatchResponse(s *scope) {
 	s.w.Header().Set("Access-Control-Allow-Origin", "*")
 	s.w.Header().Set("Content-Type", "application/json")
 	s.w.WriteHeader(s.s)
