@@ -2,7 +2,7 @@ package api
 
 import (
 	"encoding/json"
-	"fwork/exceptions"
+	"github.com/ravelo-systematic-solutions/fwork/exceptions"
 	"net/http"
 	"net/http/httptest"
 	"reflect"

@@ -3,7 +3,7 @@ package api
 import (
 	"crypto/rand"
 	"crypto/rsa"
-	"fwork/exceptions"
+	"github.com/ravelo-systematic-solutions/fwork/exceptions"
 )
 
 func GeneratePrivateKey(keySize int) (*rsa.PrivateKey, error) {

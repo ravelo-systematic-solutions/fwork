@@ -1,7 +1,7 @@
 package testutils_test
 
 import (
-	"fwork/testutils"
+	"github.com/ravelo-systematic-solutions/fwork/testutils"
 	"testing"
 )
 

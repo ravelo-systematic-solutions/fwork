@@ -8,7 +8,7 @@ import (
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
-	"fwork/exceptions"
+	"github.com/ravelo-systematic-solutions/fwork/exceptions"
 	"log"
 	"math/big"
 	"net/http"

@@ -1,8 +1,8 @@
 package exceptions_test
 
 import (
-	"fwork/exceptions"
-	"fwork/testutils"
+	"github.com/ravelo-systematic-solutions/fwork/exceptions"
+	"github.com/ravelo-systematic-solutions/fwork/testutils"
 	"reflect"
 	"testing"
 )

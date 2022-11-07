@@ -1,7 +1,7 @@
 package api
 
 import (
-	"fwork/exceptions"
+	"github.com/ravelo-systematic-solutions/fwork/exceptions"
 	"testing"
 )
 

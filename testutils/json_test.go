@@ -1,7 +1,7 @@
 package testutils
 
 import (
-	"fwork/exceptions"
+	"github.com/ravelo-systematic-solutions/fwork/exceptions"
 	"reflect"
 	"strings"
 	"testing"

@@ -1,7 +1,7 @@
 package api
 
 import (
-	"fwork/response"
+	"github.com/ravelo-systematic-solutions/fwork/response"
 	"net/http"
 )
 
