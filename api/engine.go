@@ -234,12 +234,16 @@ func NewEngine(certSubject CertificateSubject, privateKey *rsa.PrivateKey, confi
 		Certificates: []tls.Certificate{serverCert},
 	}
 
-	return &engine{
+	e := engine{
 		server: http.Server{
 			Addr:      config.Service.Internal,
 			TLSConfig: tlsConfig,
 		},
 		certSubject: certSubject,
 		config:      config,
-	}, nil
+		routes:      make(map[string]Handler),
+	}
+	e.server.Handler = &e
+
+	return &e, nil
 }
