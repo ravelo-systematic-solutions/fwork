@@ -110,109 +110,110 @@ func TestEngine_Run(t *testing.T) {
 	}
 }
 
-func TestEngine_Post(t *testing.T) {
-	// given
-	url := "/some-url"
-	e := engine{
-		routes: make(map[string]Handler, 0),
-	}
-	key := GenerateEndpointKey(http.MethodPost, url)
-
-	// when
-	e.Post(url, func(s Scope) {})
-
-	// then
-	if _, ok := e.routes[key]; !ok {
-		t.Errorf("engine.Post() did not register endpoint")
-	}
-}
-
-func TestEngine_Get(t *testing.T) {
-	// given
-	url := "/some-url"
-	e := engine{
-		routes: make(map[string]Handler, 0),
-	}
-	key := GenerateEndpointKey(http.MethodGet, url)
-
-	// when
-	e.Get(url, func(s Scope) {})
-
-	// then
-	if _, ok := e.routes[key]; !ok {
-		t.Errorf("engine.Get() did not register endpoint")
-	}
-}
-
-func TestEngine_Put(t *testing.T) {
-	// given
-	url := "/some-url"
-	e := engine{
-		routes: make(map[string]Handler, 0),
-	}
-	key := GenerateEndpointKey(http.MethodPut, url)
-
-	// when
-	e.Put(url, func(s Scope) {})
-
-	// then
-	if _, ok := e.routes[key]; !ok {
-		t.Errorf("ApiBuilder.Put() did not register endpoint")
-	}
-}
-
-func TestEngine_Delete(t *testing.T) {
-	// given
-	url := "/some-url"
-	e := engine{
-		routes: make(map[string]Handler, 0),
-	}
-	key := GenerateEndpointKey(http.MethodDelete, url)
-
-	// when
-	e.Delete(url, func(s Scope) {})
-
-	// then
-	if _, ok := e.routes[key]; !ok {
-		t.Errorf("ApiBuilder.DeleteById() did not register endpoint")
-	}
-}
-
-func TestEngine_Get_duplicated(t *testing.T) {
-	// given
-	url := "/some-url"
-	e := engine{
-		routes: make(map[string]Handler, 0),
-	}
-	key := GenerateEndpointKey(http.MethodGet, url)
-	e.routes[key] = func(s Scope) {}
-
-	// when
-	err := e.Get(url, func(s Scope) {})
-
-	// then
-	if err == nil {
-		t.Errorf("engine.Get() duplicated route should retrurn an error")
-	}
-	ex := err.(*exceptions.Exception)
-
-	if ex.Code != exceptions.ResourceDuplicatedCode {
-		t.Errorf(
-			"engine.Get() fail with duplicate route, got %v wants %v",
-			ex.Code,
-			exceptions.ResourceDuplicatedCode,
-		)
-	}
-
-	if ex.Message != exceptions.ResourceDuplicatedMessage {
-		t.Errorf(
-			"engine.Get() fail with duplicate route, got %v wants %v",
-			ex.Message,
-			exceptions.ResourceDuplicatedMessage,
-		)
-	}
-
-}
+//
+//func TestEngine_Post(t *testing.T) {
+//	// given
+//	url := "/some-url"
+//	e := engine{
+//		routes: make(map[string]Handler, 0),
+//	}
+//	key := GenerateEndpointKey(http.MethodPost, url)
+//
+//	// when
+//	e.Post(url, func(s Scope) {})
+//
+//	// then
+//	if _, ok := e.routes[key]; !ok {
+//		t.Errorf("engine.Post() did not register endpoint")
+//	}
+//}
+//
+//func TestEngine_Get(t *testing.T) {
+//	// given
+//	url := "/some-url"
+//	e := engine{
+//		routes: make(map[string]Handler, 0),
+//	}
+//	key := GenerateEndpointKey(http.MethodGet, url)
+//
+//	// when
+//	e.Get(url, func(s Scope) {})
+//
+//	// then
+//	if _, ok := e.routes[key]; !ok {
+//		t.Errorf("engine.Get() did not register endpoint")
+//	}
+//}
+//
+//func TestEngine_Put(t *testing.T) {
+//	// given
+//	url := "/some-url"
+//	e := engine{
+//		routes: make(map[string]Handler, 0),
+//	}
+//	key := GenerateEndpointKey(http.MethodPut, url)
+//
+//	// when
+//	e.Put(url, func(s Scope) {})
+//
+//	// then
+//	if _, ok := e.routes[key]; !ok {
+//		t.Errorf("ApiBuilder.Put() did not register endpoint")
+//	}
+//}
+//
+//func TestEngine_Delete(t *testing.T) {
+//	// given
+//	url := "/some-url"
+//	e := engine{
+//		routes: make(map[string]Handler, 0),
+//	}
+//	key := GenerateEndpointKey(http.MethodDelete, url)
+//
+//	// when
+//	e.Delete(url, func(s Scope) {})
+//
+//	// then
+//	if _, ok := e.routes[key]; !ok {
+//		t.Errorf("ApiBuilder.DeleteById() did not register endpoint")
+//	}
+//}
+//
+//func TestEngine_Get_duplicated(t *testing.T) {
+//	// given
+//	url := "/some-url"
+//	e := engine{
+//		routes: make(map[string]Handler, 0),
+//	}
+//	key := GenerateEndpointKey(http.MethodGet, url)
+//	e.routes[key] = func(s Scope) {}
+//
+//	// when
+//	err := e.Get(url, func(s Scope) {})
+//
+//	// then
+//	if err == nil {
+//		t.Errorf("engine.Get() duplicated route should retrurn an error")
+//	}
+//	ex := err.(*exceptions.Exception)
+//
+//	if ex.Code != exceptions.ResourceDuplicatedCode {
+//		t.Errorf(
+//			"engine.Get() fail with duplicate route, got %v wants %v",
+//			ex.Code,
+//			exceptions.ResourceDuplicatedCode,
+//		)
+//	}
+//
+//	if ex.Message != exceptions.ResourceDuplicatedMessage {
+//		t.Errorf(
+//			"engine.Get() fail with duplicate route, got %v wants %v",
+//			ex.Message,
+//			exceptions.ResourceDuplicatedMessage,
+//		)
+//	}
+//
+//}
 
 func TestEngine_GetHandler_success(t *testing.T) {
 	//given

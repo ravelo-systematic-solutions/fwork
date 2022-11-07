@@ -45,15 +45,18 @@ func (s *scopeTest) IsJsonRes(body interface{}) error {
 
 //NewTestScope creates a Handler's scope instance
 //for testing purposes
-func NewTestScope(method, url string, body io.Reader) *scopeTest {
+func NewTestScope(method, url string, body io.Reader, c Controller) *scopeTest {
 	w := httptest.NewRecorder()
 	r, _ := http.NewRequest(method, url, body)
-
-	return &scopeTest{
+	s := scopeTest{
 		scope{
 			r: r,
 			w: w,
 			d: make(map[string]any),
 		},
 	}
+
+	c.GetHandler(http.MethodGet, c.Url())(&s)
+
+	return &s
 }
