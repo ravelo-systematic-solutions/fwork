@@ -33,7 +33,7 @@ func TestGetStructType_var(t *testing.T) {
 
 func TestFuncName_func(t *testing.T) {
 	//given
-	want := "fwork/testutils_test.SampleFunc"
+	want := "github.com/ravelo-systematic-solutions/fwork/testutils_test.SampleFunc"
 
 	//when & then
 	if got := testutils.GetType(SampleFunc); got != want {
