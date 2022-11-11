@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"net/http/httptest"
 )
@@ -49,11 +48,24 @@ func (s *scopeTest) Execute() {
 	s.c.GetHandler(http.MethodGet, s.c.Url())(s)
 }
 
+func combineUrl(url, query string) string {
+	if query != "" {
+		return fmt.Sprintf(
+			"%s?%s",
+			url,
+			query,
+		)
+	} else {
+		return url
+	}
+}
+
 //NewTestScope creates a Handler's scope instance
 //for testing purposes
-func NewTestScope(method string, body io.Reader, query interface{}, c Controller) *scopeTest {
+func NewTestScope(method string, req Request, c Controller) *scopeTest {
 	w := httptest.NewRecorder()
-	r, _ := http.NewRequest(method, c.Url(), body)
+	url := combineUrl(c.Url(), req.EncodedQuery())
+	r, _ := http.NewRequest(method, url, nil)
 	s := scopeTest{
 		scope: scope{
 			r: r,
