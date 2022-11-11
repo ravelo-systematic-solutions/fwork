@@ -35,7 +35,10 @@ func required(v any) bool {
 	return false
 }
 
-func (s *scope) Query(payload interface{}) error {
+//ValidateQuery extract & validates the Get parameters
+//from a request using the "query" tag for the name of the
+//fields and the "validate" tag for validation rules.
+func (s *scope) ValidateQuery(payload interface{}) error {
 	dataType := reflect.TypeOf(payload).Elem()
 	dataValue := reflect.ValueOf(payload).Elem()
 	ex := exceptions.NewBuilder()
@@ -93,8 +96,10 @@ func (s *scope) Query(payload interface{}) error {
 	return ex.Exception()
 }
 
-// JsonBody extract body from request and validates
-func (s *scope) JsonBody(payload interface{}) error {
+//ValidateJsonBody extract & validates the body from a request
+//using the "json" tag for the name of the fields and the
+//"validate" tag for validation rules.
+func (s *scope) ValidateJsonBody(payload interface{}) error {
 
 	err := json.NewDecoder(s.r.Body).Decode(payload)
 	if err != nil {
@@ -140,7 +145,10 @@ func (s *scope) JsonBody(payload interface{}) error {
 	return ex.Exception()
 }
 
-func (s *scope) Headers(payload interface{}) error {
+//ValidateHeaders extract & validates a request header
+//using the "header" tag for the name of the fields and the
+//"validate" tag for validation rules.
+func (s *scope) ValidateHeaders(payload interface{}) error {
 	dataType := reflect.TypeOf(payload).Elem()
 	dataValue := reflect.ValueOf(payload).Elem()
 	ex := exceptions.NewBuilder()

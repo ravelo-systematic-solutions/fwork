@@ -62,41 +62,6 @@ func (e *engine) Controller(c Controller) error {
 	return nil
 }
 
-//// Post is a shortcut for registering a POST Handler
-//func (e *engine) Post(url string, endpoint Handler) error {
-//	return e.addEndpoint(http.MethodPost, url, endpoint)
-//}
-//
-//// Get is a shortcut for registering a GET Handler
-//func (e *engine) Get(url string, endpoint Handler) error {
-//	return e.addEndpoint(http.MethodGet, url, endpoint)
-//}
-//
-//// Put is a shortcut for registering a PUT Handler
-//func (e *engine) Put(url string, endpoint Handler) error {
-//	return e.addEndpoint(http.MethodPut, url, endpoint)
-//}
-//
-//// Delete is a shortcut for registering a DELETE Handler
-//func (e *engine) Delete(url string, endpoint Handler) error {
-//	return e.addEndpoint(http.MethodDelete, url, endpoint)
-//}
-//
-//// addEndpoint is a shortcut which registers an Api Handler
-//func (e *engine) addEndpoint(method, url string, endpoint Handler) error {
-//	key := GenerateEndpointKey(method, url)
-//	if _, ok := e.routes[key]; ok {
-//		ex := exceptions.NewBuilder()
-//		ex.SetCode(exceptions.ResourceDuplicatedCode)
-//		ex.SetMessage(exceptions.ResourceDuplicatedMessage)
-//		ex.Include(exceptions.Data{Value: key})
-//
-//		return ex.Exception()
-//	}
-//	e.routes[key] = endpoint
-//	return nil
-//}
-
 //ServeHTTP entry point for HTTP requests
 func (e *engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
@@ -106,25 +71,9 @@ func (e *engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	key := GenerateEndpointKey(r.Method, r.URL.Path)
 	handler := e.GetHandler(key)
 
-	//for _, interceptor := range e.i {
-	//	err := interceptor.Before(s)
-	//	ex := err.(*exceptions.Exception)
-	//	errs = append(errs, *ex)
-	//}
-
 	if len(errs) == 0 {
 		handler(s)
 	}
-
-	//for _, interceptor := range e.i {
-	//	err := interceptor.Before(s)
-	//	ex := err.(*exceptions.Exception)
-	//	errs = append(errs, *ex)
-	//}
-	//
-	//if len(errs) != 0 {
-	//	s.JsonRes(http., errs)
-	//}
 
 	e.DispatchResponse(s)
 }

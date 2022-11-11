@@ -249,14 +249,14 @@ func TestScope_JsonRes_success(t *testing.T) {
 	scope := scope{}
 
 	//when
-	scope.JsonRes(http.StatusAccepted, person{
+	scope.Reply(http.StatusAccepted, person{
 		Name: "Jhonny",
 	})
 
 	//then
 	if string(scope.b) != string(expected) {
 		t.Errorf(
-			"JsonRes(), got %v but want %v",
+			"Reply(), got %v but want %v",
 			string(scope.b),
 			string(expected),
 		)
