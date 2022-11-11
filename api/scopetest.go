@@ -17,53 +17,8 @@ type ScopeTest interface {
 }
 
 type scopeTest struct {
-	w http.ResponseWriter
-	r *http.Request
-	s int
-	b []byte
+	scope
 	c Controller
-	d map[string]any
-}
-
-func (s *scopeTest) GetData(key string) (any, error) {
-	return nil, nil
-}
-
-func (s *scopeTest) SetData(key string, val any) error {
-	return nil
-}
-
-func (s *scopeTest) OverrideData(key string, val any) {
-
-}
-
-func (s *scopeTest) Method() string {
-	return ""
-}
-
-func (s *scopeTest) Path() string {
-	return ""
-}
-
-func (s *scopeTest) Reply(status int, body interface{}) {
-
-}
-
-func (s *scopeTest) QueryValue(key string) string {
-	return ""
-}
-
-func (s *scopeTest) ValidateQuery(payload interface{}) error {
-
-	return nil
-}
-
-func (s *scopeTest) ValidateJsonBody(payload interface{}) error {
-	return nil
-}
-
-func (s *scopeTest) ValidateHeaders(payload interface{}) error {
-	return nil
 }
 
 func (s *scopeTest) IsStatus(status int) error {
@@ -96,14 +51,16 @@ func (s *scopeTest) Execute() {
 
 //NewTestScope creates a Handler's scope instance
 //for testing purposes
-func NewTestScope(method, url string, body io.Reader, c Controller) *scopeTest {
+func NewTestScope(method string, body io.Reader, query interface{}, c Controller) *scopeTest {
 	w := httptest.NewRecorder()
-	r, _ := http.NewRequest(method, url, body)
+	r, _ := http.NewRequest(method, c.Url(), body)
 	s := scopeTest{
-		r: r,
-		w: w,
+		scope: scope{
+			r: r,
+			w: w,
+			d: make(map[string]any),
+		},
 		c: c,
-		d: make(map[string]any),
 	}
 
 	return &s
