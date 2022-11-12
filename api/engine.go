@@ -53,7 +53,7 @@ func (e *engine) Controller(c Controller) error {
 			ex.SetMessage(exceptions.ResourceDuplicatedMessage)
 			ex.Include(exceptions.Data{Value: k})
 
-			return ex.Exception()
+			return ex.Build()
 		}
 
 		e.routes[k] = h
@@ -108,7 +108,7 @@ func (e *engine) Run() error {
 	ex.SetMessage(exceptions.ResourceClosedMessage)
 	ex.Include(exceptions.Data{Value: err.Error()})
 
-	return ex.Exception()
+	return ex.Build()
 }
 
 func NewEngine(certSubject CertificateSubject, privateKey *rsa.PrivateKey, config Config) (*engine, error) {
@@ -138,7 +138,7 @@ func NewEngine(certSubject CertificateSubject, privateKey *rsa.PrivateKey, confi
 		e.SetMessage(exceptions.ResourceNotGeneratedMessage)
 		e.Include(exceptions.Data{Value: err.Error()})
 
-		return nil, e.Exception()
+		return nil, e.Build()
 	}
 
 	certPEM := new(bytes.Buffer)
@@ -152,7 +152,7 @@ func NewEngine(certSubject CertificateSubject, privateKey *rsa.PrivateKey, confi
 		e.SetMessage(exceptions.ResourceNotEncodedMessage)
 		e.Include(exceptions.Data{Value: err.Error()})
 
-		return nil, e.Exception()
+		return nil, e.Build()
 	}
 
 	certPrivKeyPEM := new(bytes.Buffer)
@@ -166,7 +166,7 @@ func NewEngine(certSubject CertificateSubject, privateKey *rsa.PrivateKey, confi
 		e.SetMessage(exceptions.ResourceNotEncodedMessage)
 		e.Include(exceptions.Data{Value: err.Error()})
 
-		return nil, e.Exception()
+		return nil, e.Build()
 	}
 
 	serverCert, err := tls.X509KeyPair(certPEM.Bytes(), certPrivKeyPEM.Bytes())
@@ -176,7 +176,7 @@ func NewEngine(certSubject CertificateSubject, privateKey *rsa.PrivateKey, confi
 		e.SetMessage(exceptions.ResourcesNotPairedMessage)
 		e.Include(exceptions.Data{Value: err.Error()})
 
-		return nil, e.Exception()
+		return nil, e.Build()
 	}
 
 	tlsConfig := &tls.Config{

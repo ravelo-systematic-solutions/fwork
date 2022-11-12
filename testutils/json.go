@@ -14,7 +14,7 @@ func JsonToVar(reader io.Reader, body interface{}) error {
 		e.SetCode(exceptions.ResourceInvalidCode)
 		e.SetMessage(exceptions.ResourceInvalidMessage)
 
-		return e.Exception()
+		return e.Build()
 	}
 
 	return nil

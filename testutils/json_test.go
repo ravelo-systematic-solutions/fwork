@@ -36,7 +36,7 @@ func TestJsonToVar_invalidJson(t *testing.T) {
 	e.SetCode(exceptions.ResourceInvalidCode)
 	e.SetMessage(exceptions.ResourceInvalidMessage)
 
-	expected := e.Exception()
+	expected := e.Build()
 
 	//when
 	actual := JsonToVar(strings.NewReader(`{"name}`), nil)

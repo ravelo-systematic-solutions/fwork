@@ -93,7 +93,7 @@ func (s *scope) ValidateQuery(payload interface{}) error {
 		return nil
 	}
 
-	return ex.Exception()
+	return ex.Build()
 }
 
 //ValidateJsonBody extract & validates the body from a request
@@ -142,7 +142,7 @@ func (s *scope) ValidateJsonBody(payload interface{}) error {
 		return nil
 	}
 
-	return ex.Exception()
+	return ex.Build()
 }
 
 //ValidateHeaders extract & validates a request header
@@ -202,5 +202,5 @@ func (s *scope) ValidateHeaders(payload interface{}) error {
 		return nil
 	}
 
-	return ex.Exception()
+	return ex.Build()
 }

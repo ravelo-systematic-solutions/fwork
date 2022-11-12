@@ -16,7 +16,7 @@ func GeneratePrivateKey(keySize int) (*rsa.PrivateKey, error) {
 			Value: err.Error(),
 		})
 
-		return nil, e.Exception()
+		return nil, e.Build()
 	}
 
 	return rsaKey, nil

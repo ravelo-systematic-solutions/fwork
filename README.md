@@ -4,9 +4,10 @@
 
 ## Motivation
 
-This project is implemented to simplify and fasten the implementation of
+This project is implemented to simplify and fasten the prototype of
 testable/secure cloud APIs using a very specific set of conventions.
-Feel free to use it, contribute and/or submit suggestions for design changes.
+There are way more mature utilities/frameworks than this one, and we
+encourage them for production purposes.
 
 ## Resource convention
 

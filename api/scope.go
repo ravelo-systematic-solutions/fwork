@@ -38,7 +38,7 @@ func (s *scope) GetData(key string) (any, error) {
 		exception.SetCode(exceptions.ResourceNotFoundCode)
 		exception.SetMessage(exceptions.ResourceNotFoundMessage)
 
-		return nil, exception.Exception()
+		return nil, exception.Build()
 	} else {
 		return val, nil
 	}
@@ -54,7 +54,7 @@ func (s *scope) SetData(key string, val any) error {
 		exception.SetCode(exceptions.ResourceDuplicatedCode)
 		exception.SetMessage(exceptions.ResourceDuplicatedMessage)
 
-		return exception.Exception()
+		return exception.Build()
 	}
 
 	s.OverrideData(key, val)
@@ -88,7 +88,7 @@ func (s *scope) Reply(status int, body interface{}) {
 		e.SetMessage(exceptions.ResourceNotEncodedMessage)
 		e.Include(exceptions.Data{Value: err})
 
-		bodyByte, _ = json.Marshal(e.Exception())
+		bodyByte, _ = json.Marshal(e.Build())
 		status = http.StatusInternalServerError
 	}
 
