@@ -53,7 +53,7 @@ func (e *engine) Controller(c Controller) error {
 			ex.SetMessage(exceptions.ResourceDuplicatedMessage)
 			ex.Include(exceptions.Data{Value: k})
 
-			return ex.Exception()
+			return ex.Build()
 		}
 
 		e.routes[k] = h
@@ -61,41 +61,6 @@ func (e *engine) Controller(c Controller) error {
 
 	return nil
 }
-
-//// Post is a shortcut for registering a POST Handler
-//func (e *engine) Post(url string, endpoint Handler) error {
-//	return e.addEndpoint(http.MethodPost, url, endpoint)
-//}
-//
-//// Get is a shortcut for registering a GET Handler
-//func (e *engine) Get(url string, endpoint Handler) error {
-//	return e.addEndpoint(http.MethodGet, url, endpoint)
-//}
-//
-//// Put is a shortcut for registering a PUT Handler
-//func (e *engine) Put(url string, endpoint Handler) error {
-//	return e.addEndpoint(http.MethodPut, url, endpoint)
-//}
-//
-//// Delete is a shortcut for registering a DELETE Handler
-//func (e *engine) Delete(url string, endpoint Handler) error {
-//	return e.addEndpoint(http.MethodDelete, url, endpoint)
-//}
-//
-//// addEndpoint is a shortcut which registers an Api Handler
-//func (e *engine) addEndpoint(method, url string, endpoint Handler) error {
-//	key := GenerateEndpointKey(method, url)
-//	if _, ok := e.routes[key]; ok {
-//		ex := exceptions.NewBuilder()
-//		ex.SetCode(exceptions.ResourceDuplicatedCode)
-//		ex.SetMessage(exceptions.ResourceDuplicatedMessage)
-//		ex.Include(exceptions.Data{Value: key})
-//
-//		return ex.Exception()
-//	}
-//	e.routes[key] = endpoint
-//	return nil
-//}
 
 //ServeHTTP entry point for HTTP requests
 func (e *engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -106,25 +71,9 @@ func (e *engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	key := GenerateEndpointKey(r.Method, r.URL.Path)
 	handler := e.GetHandler(key)
 
-	//for _, interceptor := range e.i {
-	//	err := interceptor.Before(s)
-	//	ex := err.(*exceptions.Exception)
-	//	errs = append(errs, *ex)
-	//}
-
 	if len(errs) == 0 {
 		handler(s)
 	}
-
-	//for _, interceptor := range e.i {
-	//	err := interceptor.Before(s)
-	//	ex := err.(*exceptions.Exception)
-	//	errs = append(errs, *ex)
-	//}
-	//
-	//if len(errs) != 0 {
-	//	s.JsonRes(http., errs)
-	//}
 
 	e.DispatchResponse(s)
 }
@@ -159,7 +108,7 @@ func (e *engine) Run() error {
 	ex.SetMessage(exceptions.ResourceClosedMessage)
 	ex.Include(exceptions.Data{Value: err.Error()})
 
-	return ex.Exception()
+	return ex.Build()
 }
 
 func NewEngine(certSubject CertificateSubject, privateKey *rsa.PrivateKey, config Config) (*engine, error) {
@@ -189,7 +138,7 @@ func NewEngine(certSubject CertificateSubject, privateKey *rsa.PrivateKey, confi
 		e.SetMessage(exceptions.ResourceNotGeneratedMessage)
 		e.Include(exceptions.Data{Value: err.Error()})
 
-		return nil, e.Exception()
+		return nil, e.Build()
 	}
 
 	certPEM := new(bytes.Buffer)
@@ -203,7 +152,7 @@ func NewEngine(certSubject CertificateSubject, privateKey *rsa.PrivateKey, confi
 		e.SetMessage(exceptions.ResourceNotEncodedMessage)
 		e.Include(exceptions.Data{Value: err.Error()})
 
-		return nil, e.Exception()
+		return nil, e.Build()
 	}
 
 	certPrivKeyPEM := new(bytes.Buffer)
@@ -217,7 +166,7 @@ func NewEngine(certSubject CertificateSubject, privateKey *rsa.PrivateKey, confi
 		e.SetMessage(exceptions.ResourceNotEncodedMessage)
 		e.Include(exceptions.Data{Value: err.Error()})
 
-		return nil, e.Exception()
+		return nil, e.Build()
 	}
 
 	serverCert, err := tls.X509KeyPair(certPEM.Bytes(), certPrivKeyPEM.Bytes())
@@ -227,7 +176,7 @@ func NewEngine(certSubject CertificateSubject, privateKey *rsa.PrivateKey, confi
 		e.SetMessage(exceptions.ResourcesNotPairedMessage)
 		e.Include(exceptions.Data{Value: err.Error()})
 
-		return nil, e.Exception()
+		return nil, e.Build()
 	}
 
 	tlsConfig := &tls.Config{

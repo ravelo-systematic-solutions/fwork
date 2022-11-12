@@ -25,27 +25,27 @@ func TestScope_JsonBody(t *testing.T) {
 	var actual Sample
 
 	//when
-	err := scope.JsonBody(&actual)
+	err := scope.ValidateJsonBody(&actual)
 
 	//then
 	if err != nil {
-		t.Errorf("JsonBody() unexpected error %v", err)
+		t.Errorf("ValidateJsonBody() unexpected error %v", err)
 	}
 
 	if actual.String != "str" {
-		t.Errorf("JsonBody() got %s but want %s", actual.String, "str")
+		t.Errorf("ValidateJsonBody() got %s but want %s", actual.String, "str")
 	}
 
 	if actual.Int != 123 {
-		t.Errorf("JsonBody() got %v but want %v", actual.Int, 123)
+		t.Errorf("ValidateJsonBody() got %v but want %v", actual.Int, 123)
 	}
 
 	if actual.Bool != true {
-		t.Errorf("JsonBody() got %v but want %v", actual.Bool, true)
+		t.Errorf("ValidateJsonBody() got %v but want %v", actual.Bool, true)
 	}
 
 	if actual.Float != 123.123 {
-		t.Errorf("JsonBody() got %v but want %v", actual.Float, 123.123)
+		t.Errorf("ValidateJsonBody() got %v but want %v", actual.Float, 123.123)
 	}
 }
 
@@ -62,23 +62,23 @@ func TestScope_Headers(t *testing.T) {
 	}
 
 	//when
-	scope.Headers(&actual)
+	scope.ValidateHeaders(&actual)
 
 	//then
 	if actual.String != "str" {
-		t.Errorf("Headers() got %s but want %s", actual.String, "str")
+		t.Errorf("ValidateHeaders() got %s but want %s", actual.String, "str")
 	}
 
 	if actual.Int != 123 {
-		t.Errorf("Headers() got %v but want %v", actual.Int, 123)
+		t.Errorf("ValidateHeaders() got %v but want %v", actual.Int, 123)
 	}
 
 	if actual.Bool != true {
-		t.Errorf("Headers() got %v but want %v", actual.Bool, true)
+		t.Errorf("ValidateHeaders() got %v but want %v", actual.Bool, true)
 	}
 
 	if actual.Float != 123.123 {
-		t.Errorf("Headers() got %v but want %v", actual.Float, 123.123)
+		t.Errorf("ValidateHeaders() got %v but want %v", actual.Float, 123.123)
 	}
 
 }
@@ -93,23 +93,23 @@ func TestScope_Query(t *testing.T) {
 	}
 
 	//when
-	scope.Query(&actual)
+	scope.ValidateQuery(&actual)
 
 	//then
 	if actual.String != "str" {
-		t.Errorf("Query() got %s but want %s", actual.String, "str")
+		t.Errorf("ValidateQuery() got %s but want %s", actual.String, "str")
 	}
 
 	if actual.Int != 123 {
-		t.Errorf("Query() got %v but want %v", actual.Int, 123)
+		t.Errorf("ValidateQuery() got %v but want %v", actual.Int, 123)
 	}
 
 	if actual.Bool != true {
-		t.Errorf("Query() got %v but want %v", actual.Bool, true)
+		t.Errorf("ValidateQuery() got %v but want %v", actual.Bool, true)
 	}
 
 	if actual.Float != 123.123 {
-		t.Errorf("Query() got %v but want %v", actual.Float, 123.123)
+		t.Errorf("ValidateQuery() got %v but want %v", actual.Float, 123.123)
 	}
 
 }

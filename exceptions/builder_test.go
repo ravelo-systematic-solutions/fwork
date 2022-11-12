@@ -40,7 +40,7 @@ func TestBuilder_Exception(t *testing.T) {
 	b.Include(expected.Data[2])
 
 	//when
-	actual := b.Exception()
+	actual := b.Build()
 
 	//then
 	if !reflect.DeepEqual(actual, expected) {

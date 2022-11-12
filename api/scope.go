@@ -12,8 +12,11 @@ type Scope interface {
 	OverrideData(key string, val any)
 	Method() string
 	Path() string
-	JsonRes(status int, body interface{})
+	Reply(status int, body interface{})
 	QueryValue(key string) string
+	ValidateQuery(payload interface{}) error
+	ValidateJsonBody(payload interface{}) error
+	ValidateHeaders(payload interface{}) error
 }
 
 // scope holds Api Handler context
@@ -29,13 +32,13 @@ type scope struct {
 //contextual data to the request.
 //An exception will be thrown if
 //and when the passed key does not exist
-func (scope *scope) GetData(key string) (any, error) {
-	if val, ok := scope.d[key]; !ok {
+func (s *scope) GetData(key string) (any, error) {
+	if val, ok := s.d[key]; !ok {
 		exception := exceptions.NewBuilder()
 		exception.SetCode(exceptions.ResourceNotFoundCode)
 		exception.SetMessage(exceptions.ResourceNotFoundMessage)
 
-		return nil, exception.Exception()
+		return nil, exception.Build()
 	} else {
 		return val, nil
 	}
@@ -45,16 +48,16 @@ func (scope *scope) GetData(key string) (any, error) {
 //data to the request. An exception
 //will be thrown if the key already
 //exists
-func (scope *scope) SetData(key string, val any) error {
-	if _, ok := scope.d[key]; ok {
+func (s *scope) SetData(key string, val any) error {
+	if _, ok := s.d[key]; ok {
 		exception := exceptions.NewBuilder()
 		exception.SetCode(exceptions.ResourceDuplicatedCode)
 		exception.SetMessage(exceptions.ResourceDuplicatedMessage)
 
-		return exception.Exception()
+		return exception.Build()
 	}
 
-	scope.OverrideData(key, val)
+	s.OverrideData(key, val)
 
 	return nil
 }
@@ -62,22 +65,22 @@ func (scope *scope) SetData(key string, val any) error {
 //OverrideData sets additional contextual
 //data to the request regarless if the key
 //already exists or not
-func (scope *scope) OverrideData(key string, val any) {
-	scope.d[key] = val
+func (s *scope) OverrideData(key string, val any) {
+	s.d[key] = val
 }
 
 //Method retrieves the requested Method
-func (scope *scope) Method() string {
-	return scope.r.Method
+func (s *scope) Method() string {
+	return s.r.Method
 }
 
 //Path retrieves the requested URL
-func (scope *scope) Path() string {
-	return scope.r.URL.RequestURI()
+func (s *scope) Path() string {
+	return s.r.URL.RequestURI()
 }
 
-// JsonRes replies to client with json format
-func (s *scope) JsonRes(status int, body interface{}) {
+// Reply replies to client with json format
+func (s *scope) Reply(status int, body interface{}) {
 	bodyByte, err := json.Marshal(body)
 	if err != nil {
 		e := exceptions.NewBuilder()
@@ -85,7 +88,7 @@ func (s *scope) JsonRes(status int, body interface{}) {
 		e.SetMessage(exceptions.ResourceNotEncodedMessage)
 		e.Include(exceptions.Data{Value: err})
 
-		bodyByte, _ = json.Marshal(e.Exception())
+		bodyByte, _ = json.Marshal(e.Build())
 		status = http.StatusInternalServerError
 	}
 
@@ -107,11 +110,3 @@ func NewScope(w http.ResponseWriter, r *http.Request) *scope {
 		d: make(map[string]any),
 	}
 }
-
-//// JsonBody contains the scope's body in JSON format
-//func (s *scope) extractJsonBody(body interface{}) {
-//	err := json.NewDecoder(s.r.Body).Decode(&body)
-//	if err != nil {
-//		log.Fatalln(err)
-//	}
-//}

@@ -5,18 +5,19 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"net/http/httptest"
 )
 
 type ScopeTest interface {
+	Scope
 	IsStatus(status int) error
-	IsJsonRes(body interface{}) error
+	ReplyWas(body interface{}) error
 }
 
 type scopeTest struct {
 	scope
+	c Controller
 }
 
 func (s *scopeTest) IsStatus(status int) error {
@@ -30,7 +31,7 @@ func (s *scopeTest) IsStatus(status int) error {
 	return nil
 }
 
-func (s *scopeTest) IsJsonRes(body interface{}) error {
+func (s *scopeTest) ReplyWas(body interface{}) error {
 	if bodyByte, err := json.Marshal(body); err != nil {
 		return errors.New("failed to encode body")
 	} else if bytes.Compare(bodyByte, s.b) != 0 {
@@ -43,20 +44,36 @@ func (s *scopeTest) IsJsonRes(body interface{}) error {
 	return nil
 }
 
+func (s *scopeTest) Execute() {
+	s.c.GetHandler(http.MethodGet, s.c.Url())(s)
+}
+
+func combineUrl(url, query string) string {
+	if query != "" {
+		return fmt.Sprintf(
+			"%s?%s",
+			url,
+			query,
+		)
+	} else {
+		return url
+	}
+}
+
 //NewTestScope creates a Handler's scope instance
 //for testing purposes
-func NewTestScope(method, url string, body io.Reader, c Controller) *scopeTest {
+func NewTestScope(method string, req Request, c Controller) *scopeTest {
 	w := httptest.NewRecorder()
-	r, _ := http.NewRequest(method, url, body)
+	url := combineUrl(c.Url(), req.EncodedQuery())
+	r, _ := http.NewRequest(method, url, nil)
 	s := scopeTest{
-		scope{
+		scope: scope{
 			r: r,
 			w: w,
 			d: make(map[string]any),
 		},
+		c: c,
 	}
-
-	c.GetHandler(http.MethodGet, c.Url())(&s)
 
 	return &s
 }

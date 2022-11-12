@@ -10,9 +10,9 @@ type ExceptionBlueprint interface {
 
 //Data stores information about an exception
 type Data struct {
-	Name  string `json:"name" bson:"name" xml:"name" yaml:"name" asn1:"utf8"`
-	Tag   string `json:"tag" bson:"tag" xml:"tag" yaml:"tag" asn1:"utf8"`
-	Value any    `json:"value" bson:"value" xml:"value" yaml:"value" asn1:"utf8"`
+	Name  string `json:"name,omitempty" bson:"name,omitempty" xml:"name,omitempty" yaml:"name,omitempty" asn1:"utf8"`
+	Tag   string `json:"tag,omitempty" bson:"tag,omitempty" xml:"tag,omitempty" yaml:"tag,omitempty" asn1:"utf8"`
+	Value any    `json:"value,omitempty" bson:"value,omitempty" xml:"value,omitempty" yaml:"value,omitempty" asn1:"utf8"`
 }
 
 //Exception holds information about expected

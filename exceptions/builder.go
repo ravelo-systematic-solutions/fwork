@@ -4,7 +4,7 @@ package exceptions
 //exceptions by using the Builder
 //design pattern.
 type builder struct {
-	exception Exception
+	Exception
 }
 
 //NewBuilder retrieves an empty
@@ -17,29 +17,29 @@ func NewBuilder() *builder {
 	}}
 }
 
-//Exception Retrieves Exception instance
-func (b *builder) Exception() *Exception {
-	return &b.exception
+//Build Retrieves Exception instance
+func (b *builder) Build() *Exception {
+	return &b.Exception
 }
 
 //Include adds a new piece of atomic
 //exception Data to the struct
 func (b *builder) Include(data Data) {
-	b.exception.Data = append(b.exception.Data, data)
+	b.Data = append(b.Data, data)
 }
 
 //SetMessage overwrites its value
 func (b *builder) SetMessage(message Message) {
-	b.exception.Message = message
+	b.Message = message
 }
 
 //SetCode overwrites its value
 func (b *builder) SetCode(code Code) {
-	b.exception.Code = code
+	b.Code = code
 }
 
 //IsEmpty retrieves if the exception
 //contains metadata
 func (b *builder) IsEmpty() bool {
-	return len(b.exception.Data) == 0
+	return len(b.Data) == 0
 }

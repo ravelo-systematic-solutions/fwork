@@ -12,5 +12,5 @@ type Handler func(scope Scope)
 //NotFound is the default handler
 //used if no handler matched the request
 func NotFound(scope Scope) {
-	scope.JsonRes(http.StatusNotFound, response.Void{})
+	scope.Reply(http.StatusNotFound, response.Void{})
 }
